@@ -1,0 +1,15 @@
+# Môi trường ảo của Python
+quanlynhansu-backend/venv/
+
+# Thư viện của Node.js
+quanlynhansu-frontend/node_modules/
+
+# Database SQLite
+quanlynhansu-backend/db.sqlite3
+
+# Các file cache của Python
+**/__pycache__/
+**/*.pyc
+
+# File build của React
+quanlynhansu-frontend/build/

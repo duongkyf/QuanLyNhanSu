@@ -1,0 +1,74 @@
+============================================================
+HƯỚNG DẪN CÀI ĐẶT VÀ CHẠY PROJECT QUẢN LÝ NHÂN SỰ
+============================================================
+
+*** YÊU CẦU CÀI ĐẶT TRƯỚC ***
+1. Python (phiên bản 3.8 trở lên)
+2. Node.js (phiên bản LTS)
+3. Git
+
+============================================================
+*** CÁC BƯỚC THỰC HIỆN ***
+============================================================
+
+---------------------------------
+BƯỚC 1: TẢI CODE VỀ MÁY
+---------------------------------
+1. Mở Terminal (CMD hoặc PowerShell).
+2. Di chuyển đến thư mục bạn muốn lưu project (ví dụ: cd Documents).
+3. Chạy lệnh sau (thay URL bằng link GitHub của bạn):
+   git clone https://github.com/tenban/quanlynhansu-project.git
+4. Di chuyển vào thư mục project vừa tải về:
+   cd quanlynhansu-project
+
+---------------------------------
+BƯỚC 2: CÀI ĐẶT BACKEND (DJANGO)
+---------------------------------
+* Mở một cửa sổ Terminal MỚI và chạy các lệnh sau:
+
+1. Di chuyển vào thư mục backend:
+   cd quanlynhansu-backend
+
+2. Tạo môi trường ảo (chỉ làm lần đầu):
+   python -m venv venv
+
+3. Kích hoạt môi trường ảo (làm mỗi khi mở terminal):
+   .\venv\Scripts\activate
+
+4. Cài đặt các thư viện Python:
+   pip install -r requirements.txt
+
+5. Tạo cơ sở dữ liệu:
+   python manage.py migrate
+
+6. Tạo tài khoản admin (tùy chọn):
+   python manage.py createsuperuser
+
+---------------------------------
+BƯỚC 3: CÀI ĐẶT FRONTEND (REACT)
+---------------------------------
+* Mở một cửa sổ Terminal MỚI THỨ HAI và chạy các lệnh sau:
+
+1. Di chuyển vào thư mục frontend:
+   cd quanlynhansu-frontend
+
+2. Cài đặt các thư viện JavaScript:
+   npm install
+
+---------------------------------
+BƯỚC 4: CHẠY ỨNG DỤNG
+---------------------------------
+* Bạn cần chạy song song cả hai Terminal đã mở ở trên.
+
+1. Trong Terminal 1 (Backend):
+   - Đảm bảo môi trường ảo (venv) đã được kích hoạt.
+   - Chạy lệnh:
+     python manage.py runserver
+   - Backend sẽ chạy ở http://127.0.0.1:8000
+
+2. Trong Terminal 2 (Frontend):
+   - Chạy lệnh:
+     npm start
+   - Trang web sẽ tự động mở trong trình duyệt ở http://localhost:3000
+
+============================================================
