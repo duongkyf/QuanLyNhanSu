@@ -77,16 +77,63 @@ class DonXinNghi(models.Model):
 
 # === Model UserAccount phải được định nghĩa ở đây ===
 class UserAccount(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=50, default='Employee')
-
-    # Thêm null=True và blank=True
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     employee = models.OneToOneField(
         NhanVien, 
-        on_delete=models.CASCADE, 
-        null=True,  # <-- Cho phép database lưu giá trị rỗng
-        blank=True  # <-- Cho phép admin form để trống
-    )
+        on_delete=models.SET_NULL,  
+        null=True,                  
+        blank=True                  
+    ) 
+    role = models.CharField(max_length=20, choices=[('Admin', 'Admin'), ('HR', 'HR'), ('Manager', 'Manager'), ('Employee', 'Employee')], default='Employee', verbose_name="Vai trò")
 
     def __str__(self):
         return f"{self.user.username} - {self.role}"
+
+# ... (các model khác giữ nguyên) ...
+
+# === Model Bảng Lương ===
+class Payslip(models.Model):
+    nhan_vien = models.ForeignKey(NhanVien, on_delete=models.CASCADE, verbose_name="Nhân viên")
+    thang = models.PositiveIntegerField(verbose_name="Tháng")
+    nam = models.PositiveIntegerField(verbose_name="Năm")
+    luong_co_ban = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Lương cơ bản")
+    phu_cap = models.DecimalField(max_digits=15, decimal_places=2, default=0, verbose_name="Phụ cấp")
+    khau_tru = models.DecimalField(max_digits=15, decimal_places=2, default=0, verbose_name="Khấu trừ")
+    # Bạn có thể thêm các trường khác như: thuong, tien_ot, thue_tncn...
+    luong_thuc_nhan = models.DecimalField(max_digits=15, decimal_places=2, verbose_name="Lương thực nhận")
+
+    class Meta:
+        verbose_name = "Bảng Lương"
+        verbose_name_plural = "Bảng Lương"
+        # Đảm bảo mỗi nhân viên chỉ có 1 bảng lương/tháng
+        unique_together = ('nhan_vien', 'thang', 'nam')
+
+    def __str__(self):
+        return f"Bảng lương {self.thang}/{self.nam} - {self.nhan_vien.ho_ten}"
+
+# ... (các model khác giữ nguyên) ...
+
+# === Model Bảng Lương ===
+class Payslip(models.Model):
+    # ... (các trường của bạn như nhan_vien, thang, nam, luong_co_ban, phu_cap, khau_tru) ...
+    # Ví dụ:
+    nhan_vien = models.ForeignKey(NhanVien, on_delete=models.CASCADE)
+    thang = models.IntegerField()
+    nam = models.IntegerField()
+    luong_co_ban = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    phu_cap = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    khau_tru = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    
+    # Trường này sẽ được tự động tính:
+    luong_thuc_nhan = models.DecimalField(max_digits=10, decimal_places=2, blank=True) # Thêm blank=True
+
+    # ⭐️ THÊM PHƯƠNG THỨC NÀY VÀO:
+    def save(self, *args, **kwargs):
+        # Tự động tính toán lương thực nhận
+        self.luong_thuc_nhan = self.luong_co_ban + self.phu_cap - self.khau_tru
+        
+        # Gọi phương thức save() gốc để lưu vào database
+        super(Payslip, self).save(*args, **kwargs) 
+
+    def __str__(self):
+        return f"Phiếu lương {self.nhan_vien.ho_ten} - {self.thang}/{self.nam}"

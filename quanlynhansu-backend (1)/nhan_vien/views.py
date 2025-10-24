@@ -3,10 +3,12 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from rest_framework.exceptions import ValidationError
-
+from .models import Payslip # Thêm Payslip
+from .serializers import PayslipSerializer # Thêm PayslipSerializer
 # Import các permission, model và serializer
-from .permissions import IsManagerOrReadOnly, DonXinNghiPermission # <-- Đã sửa
+from .permissions import IsManagerOrReadOnly, DonXinNghiPermission
 from .models import (
     NhanVien, PhongBan, ChucVu, ChamCong, DonXinNghi, UserAccount
 )
@@ -114,7 +116,7 @@ class DonXinNghiViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
         
-        don_xin_nghi.trang_thai = 'Đã phê duyệt'
+        don_xin_nghi.trang_thai = 'approved' # Sửa thành 'approved'
         # don_xin_nghi.nguoi_duyet = request.user 
         don_xin_nghi.save()
         
@@ -135,9 +137,20 @@ class DonXinNghiViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        don_xin_nghi.trang_thai = 'Bị từ chối'
+        don_xin_nghi.trang_thai = 'rejected' # Sửa thành 'rejected'
         # don_xin_nghi.ly_do_tu_choi = request.data.get('ly_do', '')
         don_xin_nghi.save()
 
         serializer = self.get_serializer(don_xin_nghi)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class PayslipViewSet(viewsets.ModelViewSet): # SỬA 1: Đổi từ ReadOnlyModelViewSet sang ModelViewSet
+    """
+    API endpoint cho phép quản lý Bảng Lương (GET, POST, PUT, DELETE).
+    """
+    queryset = Payslip.objects.all().select_related('nhan_vien').order_by('-nam', '-thang')
+    serializer_class = PayslipSerializer
+    
+    # SỬA 2: Thay AllowAny bằng permission bảo mật.
+    # Chỉ Manager/HR mới được phép tạo, sửa, xóa bảng lương.
+    permission_classes = [IsAuthenticated, IsManagerOrReadOnly]

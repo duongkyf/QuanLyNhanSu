@@ -17,6 +17,8 @@ import DepartmentList from '../pages/department/DepartmentList';
 import PositionList from '../pages/position/PositionList';
 import ChamCongList from '../pages/attendance/AttendanceList'; // Tên file của bạn là AttendanceList
 import DonXinNghiList from '../pages/leave/LeaveList'; // Tên file của bạn là LeaveList
+// ⭐️ THÊM IMPORT MỚI TẠI ĐÂY
+import PayslipManagement from '../pages/payslip/PayslipManagement';
 
 // Component bảo vệ Route
 const PrivateRoute = ({ children }) => {
@@ -75,6 +77,9 @@ const AppRouter = () => {
                 <Route path="chucvu" element={<PositionList />} />
                 <Route path="chamcong" element={<ChamCongList />} />
                 <Route path="donxinnghi" element={<DonXinNghiList />} />
+                
+                {/* ⭐️ THÊM ROUTE MỚI TẠI ĐÂY */}
+                <Route path="bangluong" element={<PayslipManagement />} />
                 
             </Route>
 

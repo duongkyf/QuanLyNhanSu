@@ -1,19 +1,27 @@
 import React from 'react';
 import { Menu } from 'antd';
-import { UserOutlined, AppstoreOutlined, ProfileOutlined, ClockCircleOutlined, FileDoneOutlined } from '@ant-design/icons';
-// 1. Import Link và useLocation
+import { 
+    UserOutlined, 
+    AppstoreOutlined, 
+    ProfileOutlined, 
+    ClockCircleOutlined, 
+    FileDoneOutlined,
+    DollarCircleOutlined // ⭐️ 1. Import icon mới
+} from '@ant-design/icons';
+// Import Link và useLocation
 import { Link, useLocation } from 'react-router-dom';
 
 const SiderBar = () => {
-    // 2. Dùng useLocation để biết bạn đang ở trang nào
+    // Dùng useLocation để biết bạn đang ở trang nào
     const location = useLocation();
 
-    // 3. Xác định 'key' được chọn dựa trên URL
+    // Xác định 'key' được chọn dựa trên URL
+    // Ví dụ: "/phongban" -> "phongban", "/" -> "nhanvien"
     const selectedKey = location.pathname.split('/')[1] || 'nhanvien';
 
     return (
         <Menu theme="dark" mode="inline" selectedKeys={[selectedKey]}>
-            {/* 4. Bọc Menu.Item trong <Link> và dùng 'to' */}
+            {/* Bọc Menu.Item trong <Link> và dùng 'to' */}
             <Menu.Item key="nhanvien" icon={<UserOutlined />}>
                 <Link to="/nhanvien">Nhân viên</Link>
             </Menu.Item>
@@ -32,6 +40,11 @@ const SiderBar = () => {
             
             <Menu.Item key="donxinnghi" icon={<FileDoneOutlined />}>
                 <Link to="/donxinnghi">Đơn xin nghỉ</Link>
+            </Menu.Item>
+
+            {/* ⭐️ 2. Thêm mục Bảng Lương vào đây */}
+            <Menu.Item key="bangluong" icon={<DollarCircleOutlined />}>
+                <Link to="/bangluong">Bảng Lương</Link>
             </Menu.Item>
         </Menu>
     );

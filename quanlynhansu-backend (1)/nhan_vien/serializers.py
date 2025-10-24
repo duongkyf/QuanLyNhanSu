@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from django.db import transaction
 from .models import NhanVien, PhongBan, ChucVu, ChamCong, DonXinNghi
-
+from .models import Payslip
 # ===============================================
 # Serializer cho các Model đơn giản
 # ===============================================
@@ -130,3 +130,31 @@ class DonXinNghiSerializer(serializers.ModelSerializer):
     class Meta:
         model = DonXinNghi
         fields = '__all__'
+
+# ⭐️⭐️⭐️ PHẦN SỬA LỖI 500 NẰM Ở ĐÂY ⭐️⭐️⭐️
+
+class PayslipSerializer(serializers.ModelSerializer):
+    """Serializer cho model Bảng Lương."""
+    
+    # 1. Dùng để HIỂN THỊ tên nhân viên (GET)
+    nhan_vien = serializers.StringRelatedField(read_only=True) 
+    
+    # 2. Dùng để NHẬN ID khi TẠO MỚI (POST)
+    nhan_vien_id = serializers.PrimaryKeyRelatedField(
+        queryset=NhanVien.objects.all(), 
+        source='nhan_vien', # Sẽ ghi vào trường 'nhan_vien' của model
+        write_only=True,
+        label="Nhân viên ID"
+    )
+
+    class Meta:
+        model = Payslip
+        # 3. Cập nhật 'fields' để bao gồm cả hai
+        fields = [
+            'id', 'thang', 'nam', 'luong_co_ban', 'phu_cap', 'khau_tru', 
+            'luong_thuc_nhan', 
+            'nhan_vien',    # Trường đọc
+            'nhan_vien_id'  # Trường ghi
+        ]
+        # 4. Đặt luong_thuc_nhan là read_only, vì nó được tự động tính
+        read_only_fields = ['luong_thuc_nhan']

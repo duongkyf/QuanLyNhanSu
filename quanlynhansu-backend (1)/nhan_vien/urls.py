@@ -2,6 +2,7 @@
 
 from django.urls import path
 from rest_framework.routers import DefaultRouter
+from .views import PayslipViewSet
 from .views import (
     PhongBanViewSet, 
     ChucVuViewSet, 
@@ -18,5 +19,5 @@ router.register(r'nhanvien', NhanVienViewSet, basename='nhanvien')
 router.register(r'chamcong', ChamCongViewSet)
 router.register('donxinnghi', DonXinNghiViewSet, basename='donxinnghi')
 
-
+router.register(r'payslips', PayslipViewSet)
 urlpatterns = router.urls

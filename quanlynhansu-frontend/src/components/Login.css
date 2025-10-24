@@ -1,0 +1,49 @@
+/* src/components/login/Login.css */
+
+.login-page {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #f0f2f5; /* Màu nền nhẹ cho toàn trang */
+}
+
+/* Cột bên trái (Form) */
+.login-form-side {
+  width: 40%;
+  max-width: 500px; /* Giới hạn chiều rộng tối đa */
+  min-width: 00px; /* Giới hạn chiều rộng tối thiểu */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff; /* Nền trắng cho form */
+  padding: 40px;
+}
+
+.login-form-container {
+  width: 100%;
+}
+
+.login-logo-container {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.login-logo {
+  height: 80px; /* Điều chỉnh kích thước logo của bạn */
+  width: auto;
+  margin-bottom: 16px;
+}
+
+/* Cột bên phải (Ảnh) */
+/* src/components/login/Login.css */
+
+/* ... (các class .login-page, .login-form-side, .login-logo-container... giữ nguyên) ... */
+
+/* Cột bên phải (Ảnh) */
+.login-image-side {
+  width: 60%;
+  flex-grow: 1; 
+  background-size: cover;
+  background-position: center;
+}
